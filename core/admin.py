@@ -6,7 +6,6 @@ class BookingInline(admin.TabularInline):
     extra = 0
     fields = ("user", "check_in", "check_out", "status")
     show_change_link = True
-    raw_id_fields = ("user", "room")
 
 @admin.register(RoomCategory)
 class RoomCategoryAdmin(admin.ModelAdmin):
@@ -30,4 +29,3 @@ class BookingAdmin(admin.ModelAdmin):
     search_fields = ("user__username", "user__email", "room__number")
     date_hierarchy = "check_in"
     readonly_fields = ("created_at", "updated_at")
-    raw_id_fields = ("user", "room")

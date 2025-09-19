@@ -13,7 +13,6 @@ class TimeStampedModel(models.Model):
 
 
 class RoomCategory(TimeStampedModel):
-    """Категорія кімнати: стандарт, люкс тощо."""
     name = models.CharField(max_length=100, unique=True, verbose_name="Назва")
     capacity = models.PositiveSmallIntegerField(default=1, verbose_name="Місткість, осіб")
     price_per_night = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="Ціна за ніч")
@@ -83,7 +82,7 @@ class Booking(TimeStampedModel):
         ordering = ["-created_at"]  
         constraints = [
             models.CheckConstraint(
-                check=Q(check_out__gt=F("check_in")),
+                check=Q(check_out__gt=F("check_in")), 
                 name="check_out_gt_check_in",
             )
         ]
