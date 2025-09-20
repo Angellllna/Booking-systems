@@ -3,31 +3,45 @@
 {% block content %}
 <h1>Кімнати</h1>
 
-<form method="get" style="margin:12px 0">
-  <input type="text" name="q" value="{{ q|default:'' }}" placeholder="Пошук за номером">
-  <select name="cat">
-    <option value="">Усі категорії</option>
-    {% for c in categories %}
-      <option value="{{ c.id }}" {% if cat|default:'' == c.id|stringformat:'s' %}selected{% endif %}>
-        {{ c.name }}
-      </option>
-    {% endfor %}
-  </select>
-  <button class="btn" type="submit">Фільтрувати</button>
+
+<form method="get" class="row gy-2 gx-3 align-items-end mb-3">
+  <div class="col-sm-5">
+    <label class="form-label">Пошук номера</label>
+    <input type="text" name="q" value="{{ q|default:'' }}" class="form-control" placeholder="101 або 10A">
+  </div>
+  <div class="col-sm-5">
+    <label class="form-label">Категорія</label>
+    <select name="cat" class="form-select">
+      <option value="">Усі</option>
+      {% for c in categories %}
+        <option value="{{ c.id }}" {% if cat|default:'' == c.id|stringformat:'s' %}selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-primary w-100">Фільтрувати</button>
+  </div>
 </form>
 
-<table>
-  <tr><th>Номер</th><th>Категорія</th><th>Поверх</th><th>Статус</th><th></th></tr>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
   {% for r in rooms %}
-    <tr>
-      <td>{{ r.number }}</td>
-      <td>{{ r.category.name }}</td>
-      <td>{{ r.floor }}</td>
-      <td>{% if r.is_active %}Доступна{% else %}Вимкнено{% endif %}</td>
-      <td><a class="btn" href="{% url 'core:room_detail' r.pk %}">Деталі</a></td>
-    </tr>
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Кімната №{{ r.number }}</h5>
+          <p class="card-text mb-1"><b>Категорія:</b> {{ r.category.name }}</p>
+          <p class="card-text mb-1"><b>Поверх:</b> {{ r.floor }}</p>
+          <span class="badge {% if r.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+            {% if r.is_active %}Доступна{% else %}Вимкнено{% endif %}
+          </span>
+        </div>
+        <div class="card-footer bg-white">
+          <a class="btn btn-outline-primary w-100" href="{% url 'core:room_detail' r.pk %}">Деталі</a>
+        </div>
+      </div>
+    </div>
   {% empty %}
-    <tr><td colspan="5">Нічого не знайдено</td></tr>
+    <p class="text-muted">Нічого не знайдено.</p>
   {% endfor %}
-</table>
+</div>
 {% endblock %}
